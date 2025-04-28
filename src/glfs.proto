@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package glfs;
+
+// These are the RPC server and client entry points, along with the message
+// type they send and return. Note that each entry point must take *exactly*
+// one input and return *exactly* one output. Define empty message types if
+// you need no call and/or return values.
+service glfs {
+    rpc lookup(filename) returns fd {}
+    rpc stat(fd) returns fstat {}
+    // Define the remainder here
+}
+
+message filename {
+    string name = 1
+}
+
+message fd {
+    int32 fd = 1
+}
+
+message fstat {
+    int32 type = 1
+    int32 size = 2
+}
+
+// Define messages for additional RPC service calls you need. Again, each
+// RPC service takes exactly one argument message and returns exactly one
+// return message. So any call with multiple input or output arguments will 
+// need multiple entries in its message. The numbers next to the fields are
+// the unique field numbers used by GRPC in that message. Pick unique ones,
+// generally in the 1-15 range. They do not need to be unique between
+// messages
