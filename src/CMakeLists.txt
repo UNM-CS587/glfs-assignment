@@ -10,19 +10,7 @@ else (ENABLE_LFS_C_LIBARRY)
     configure_file(lfs-py.py lfs.py @ONLY)
 endif (ENABLE_LFS_C_LIBRARY)
 
-# Protobuf
-set(protobuf_MODULE_COMPATIBLE TRUE)
-find_package(Protobuf CONFIG REQUIRED)
-message(STATUS "Using protobuf ${protobuf_VERSION}")
-
-# Protobuf-compiler
-set(_PROTOBUF_PROTOC $<TARGET_FILE:protobuf::protoc>)
-
- # gRPC
-find_package(gRPC CONFIG REQUIRED)
-message(STATUS "Using gRPC ${gRPC_VERSION}")
-
- # Proto file
+# Protobuf # Proto file
 get_filename_component(glfs_proto "glfs.proto" ABSOLUTE)
 get_filename_component(glfs_proto_path "${glfs_proto}" PATH)
 
@@ -31,7 +19,6 @@ set(glfs_grpc_src_py "${CMAKE_CURRENT_BINARY_DIR}/glfs_pb2_grpc.py")
 set(glfs_proto_src_py "${CMAKE_CURRENT_BINARY_DIR}/glfs_pb2.py")
 set(glfs_proto_src_pyi "${CMAKE_CURRENT_BINARY_DIR}/glfs_pb2.pyi")
 
-find_package(PythonInterp REQUIRED)
 find_package(Python3 REQUIRED)
 add_custom_command(
     OUTPUT "${glfs_grpc_src_py}" "${glfs_proto_src_py}" "${glfs_proto_src_pyi}"

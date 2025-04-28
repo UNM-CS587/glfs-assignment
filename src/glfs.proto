@@ -7,22 +7,22 @@ package glfs;
 // one input and return *exactly* one output. Define empty message types if
 // you need no call and/or return values.
 service glfs {
-    rpc lookup(filename) returns fd {}
-    rpc stat(fd) returns fstat {}
+    rpc lookup(filename) returns (fd) {}
+    rpc stat(fd) returns (fstat) {}
     // Define the remainder here
 }
 
 message filename {
-    string name = 1
+    string name = 1;
 }
 
 message fd {
-    int32 fd = 1
+    int32 fd = 1;
 }
 
 message fstat {
-    int32 type = 1
-    int32 size = 2
+    int32 type = 1;
+    int32 size = 2;
 }
 
 // Define messages for additional RPC service calls you need. Again, each
