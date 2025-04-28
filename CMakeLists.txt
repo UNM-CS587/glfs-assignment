@@ -18,4 +18,4 @@ set(ENABLE_LFS_C_LIBRARY ON)
 add_subdirectory(src)
 
 # And the directory that incldues python test code as a submodule
-#add_subdirectory(test)
+add_subdirectory(test)

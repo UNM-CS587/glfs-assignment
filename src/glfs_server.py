@@ -5,22 +5,24 @@ from concurrent import futures
 import grpc
 import glfs_pb2
 import glfs_pb2_grpc
+import sys
 
 # The LFS pacakge we're using to implement the log
 import lfs
 
-class GLFSServicer(glfs_pb2_grpc.GreeterServicer):
-    def __init__(self, logfile, port):
-        _log = LFS_Log(logfile)
+class GLFSServicer(glfs_pb2_grpc.glfsServicer):
+    def __init__(self, logfile):
+        _log = lfs.LFS_Log(logfile)
 
     def lookup(self, request, context):
-        return glfs_pb2.fd(fd=_log.lookup(request.name))
+        inum=_log.lookup(request.pinum,request.name)
+        return glfs_pb2.lookupResponse(inum)
     
-    def stat(self, request, context)
-        f = _log.stat(request.fd)
-        response = glfs.pb_2.fstat(type = f[0], size = f[[1])
+    def stat(self, request, context):
+        s = _log.stat(request.inum)
+        response = glfs.pb_2.fstat(type = s[0], size = s[1])
                                 
-    // Add additional GRPC server methods here
+    # Add additional GRPC server methods here
 
 def serve(filename, port ):
         servicer = GLFSServicer(filename)

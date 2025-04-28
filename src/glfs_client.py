@@ -1,22 +1,22 @@
-"""The Python implementation of the GRPC helloworld.Greeter client."""
+"""The Python implementation of the glfs client."""
 
 import logging
 
 import grpc
-import helloworld_pb2
-import helloworld_pb2_grpc
+import glfs_pb2
+import glfs_pb2_grpc
 
 class GLFS_Log:
-    def __init(self, hostname, port)__:
-        _channel = grpc.insecure_channel(hostname + ":" + port)
-        _stub = glfs_pb2_grpc.grpcStub(_channel)
+    def __init__(self, hostname, port):
+        channel = grpc.insecure_channel(hostname + ":" + str(port))
+        self._stub = glfs_pb2_grpc.glfsStub(channel)
 
-    def lookup(filename):
-        response = _stub.lookup(glfs_pb2.filename(name=filename)
+    def lookup(self, pfd, filename):
+        response = self._stub.lookup(glfs_pb2.lookupRequest(pinum=pfd, name=filename))
         return response.fd
 
-    def stat(inum):
-        response = _stub.stat(glfs_pb2.fd(fd=inum))
+    def stat(self, fd):
+        response = self._stub.stat(glfs_pb2.statRequest(inum=fd))
         return (response.type, response.size)
 
      # Write to an inode, throwing an exception on failure. Note that buffer is a 

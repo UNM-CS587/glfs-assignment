@@ -10,6 +10,9 @@ else (ENABLE_LFS_C_LIBARRY)
     configure_file(lfs-py.py lfs.py @ONLY)
 endif (ENABLE_LFS_C_LIBRARY)
 
+configure_file(glfs_server.py glfs_server.py)
+configure_file(glfs_client.py glfs_client.py)
+
 # Protobuf # Proto file
 get_filename_component(glfs_proto "glfs.proto" ABSOLUTE)
 get_filename_component(glfs_proto_path "${glfs_proto}" PATH)
