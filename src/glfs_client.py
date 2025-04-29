@@ -16,10 +16,10 @@ class GLFS_Log:
 
     def lookup(self, pfd, filename):
         response = self._stub.lookup(glfs_pb2.lookupRequest(pinum=pfd, name=filename))
-        if response.inum >= 0:
-            return response.inum
+        if response.val >= 0:
+            return response.val
         else:
-            raise RuntimeError("GLFS_Lookup returned " + str(response.inum))
+            raise RuntimeError("GLFS_Lookup returned " + str(response.val))
 
     def stat(self, fd):
         response = self._stub.stat(glfs_pb2.statRequest(inum=fd))
@@ -28,7 +28,7 @@ class GLFS_Log:
         else:
             raise RuntimeError("GLFS_Stat returned " + str(response.success))
 
-     # Write to an inode, throwing an exception on failure. Note that buffer is a 
+    # Write to an inode, throwing an exception on failure. Note that buffer is a 
     # bytes object of length 4096, not a string.
     def write(self, inum, buffer, block):
         raise NotImplementedError()

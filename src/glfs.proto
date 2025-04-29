@@ -5,9 +5,11 @@ package glfs;
 // These are the RPC server and client entry points, along with the message
 // type they send and return. Note that each entry point must take *exactly*
 // one input and return *exactly* one output. Define empty message types if
-// you need no call and/or return values.
+// you need no call and/or return values. RPC services can reuse respoonse and
+// request types.
+
 service glfs {
-    rpc lookup(lookupRequest) returns (lookupResponse) {}
+    rpc lookup(lookupRequest) returns (genericResponse) {}
     rpc stat(statRequest) returns (statResponse) {}
     // Define the remainder here
 }
@@ -17,8 +19,8 @@ message lookupRequest {
     string name = 2;
 }
 
-message lookupResponse {
-    int32 inum = 1;
+message genericResponse {
+    int32 val = 1;
 }
 
 message statRequest {
