@@ -6,6 +6,9 @@ import grpc
 import glfs_pb2
 import glfs_pb2_grpc
 
+LFS_DIRECTORY = 0
+LFS_REGULAR_FILE = 1
+
 class GLFS_Log:
     def __init__(self, hostname, port):
         channel = grpc.insecure_channel(hostname + ":" + str(port))
@@ -13,11 +16,17 @@ class GLFS_Log:
 
     def lookup(self, pfd, filename):
         response = self._stub.lookup(glfs_pb2.lookupRequest(pinum=pfd, name=filename))
-        return response.fd
+        if response.inum >= 0:
+            return response.inum
+        else:
+            raise RuntimeError("GLFS_Lookup returned " + str(response.inum))
 
     def stat(self, fd):
         response = self._stub.stat(glfs_pb2.statRequest(inum=fd))
-        return (response.type, response.size)
+        if response.success == 0:
+            return (response.type, response.size)
+        else:
+            raise RuntimeError("GLFS_Stat returned " + str(response.success))
 
      # Write to an inode, throwing an exception on failure. Note that buffer is a 
     # bytes object of length 4096, not a string.

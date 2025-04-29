@@ -26,8 +26,9 @@ message statRequest {
 }
 
 message statResponse {
-    int32 type = 1;
-    int32 size = 2;
+    int32 success = 1;
+    int32 type = 2;
+    int32 size = 3;
 }
 
 // Define messages for additional RPC service calls you need. Again, each

@@ -12,28 +12,35 @@ import lfs
 
 class GLFSServicer(glfs_pb2_grpc.glfsServicer):
     def __init__(self, logfile):
-        _log = lfs.LFS_Log(logfile)
+        self._log = lfs.LFS_Log(logfile)
 
     def lookup(self, request, context):
-        inum=_log.lookup(request.pinum,request.name)
-        return glfs_pb2.lookupResponse(inum)
+        try:
+            ret = self._log.lookup(request.pinum,request.name)
+        except:
+            ret = -1
+        return glfs_pb2.lookupResponse(inum = ret)
     
     def stat(self, request, context):
-        s = _log.stat(request.inum)
-        response = glfs.pb_2.fstat(type = s[0], size = s[1])
+        try:
+            s = self._log.stat(request.inum)
+            response = glfs_pb2.statResponse(success=0, type = s[0], size = s[1])
+        except:        
+            response = glfs_pb2.statResponse(success=-1, type = -1, size = 0)
+        return response
                                 
     # Add additional GRPC server methods here
-
-def serve(filename, port ):
+def create_server(filename, port):
         servicer = GLFSServicer(filename)
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-        hglfs_pb2_grpc.add_GLFSServicer_to_server(servicer, server)
-        server.add_insecure_port("[::]:" + port)
-        print("Server started with logfile" + filename + " listening on " + port)
-        server.start()
-        server.wait_for_termination()
+        glfs_pb2_grpc.add_glfsServicer_to_server(servicer, server)
+        server.add_insecure_port("[::]:" + str(port))
+        print("Server created with logfile" + filename + " listening on " + str(port))
+        return server
 
 if __name__ == "__main__":
     logging.basicConfig()
     args = sys.argv[1:]
-    serve(args[0], args[1])
+    server = create_server(args[0], args[1])
+    server.start()
+    server.wait_for_termination()
