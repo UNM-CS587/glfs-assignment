@@ -48,8 +48,24 @@ disable C compilation as in the previous assignment.
 an initial build.
 4. Modify [src/glfs_server.py](src/glfs_server.py), [src/glfs_client.py](src/glfs_client.py), 
 and [src/glfs.proto](src/glfs.proto) to define the rest of the GLFS interface and implement
-the remaining client and server entry points, using the examples for ``lookup`` and ``stat`` 
-as guidance. Note that the build system will automatically run the GRPC protocol compiler 
-to generate client and server stubs from ``glfs.proto``; you do not need to do so manually.
+the remaining client and server entry points.
 5. In the build directory, run ``make`` and ``make test`` to run all test cases. Any error output
 will be in the relevant log files.
+
+Additional Notes:
+- Using the examples of how ``lookup`` and ``stat`` are implemented in the protocol file and
+  python client and server code as guidance for how to implement the other methods you need. 
+- The build system will automatically run the GRPC protocol compiler to generate client and server 
+  stubs from ``glfs.proto``; you do not need to do so manually.
+- Error messages generated from GRPC can be complicated and long - read through them carefully
+  to figure out what is going on.
+- Adding ``print`` commands to the client and server entry points can be helpful to track what
+  is going on and should not interfere with test case success or failure.
+- The testcases start and stop servers themselves instead of calling ``glfs_server.py`` from 
+  the command line. This means that they won't run actual tests until the server works, including 
+  ``LFS_Init`` returning 0,
+- As a result, starting by running ``python3 build/src/glfs_server.py localhost 12345`` from the 
+  command line is a good place to start to make sure your LFS code is interfacing with the servercode 
+  properly.
+- The test cases are all drawn from those in the previous assignment ported to work over GRPC. 
+  Make sure your relevant LFS test passes before trying to debug the RPC-based version.
